@@ -18,16 +18,11 @@
             :south (update coordinates :y dec)
             ))
 
-(defn robot-left [rbt] (assoc rbt :bearing (turn-left (:bearing rbt))))
-
-(defn robot-right [rbt] (assoc rbt :bearing (turn-right (:bearing rbt))))
-
-(defn robot-advance [rbt] (assoc rbt :coordinates (advance (:bearing rbt) (:coordinates rbt))))
-
-(defn letter->action [letter]
+(defn movement [rbt letter]
       (case letter
-            \L robot-left
-            \A robot-advance
-            \R robot-right))
+            \L (assoc rbt :bearing (turn-left (:bearing rbt)))
+            \A (assoc rbt :coordinates (advance (:bearing rbt) (:coordinates rbt)))
+            \R (assoc rbt :bearing (turn-right (:bearing rbt)))
+            ))
 
-(defn simulate [instructions rbt] (reduce #((letter->action %2) %1) rbt instructions))
+(defn simulate [instructions rbt] (reduce #(movement %1 %2) rbt instructions))
